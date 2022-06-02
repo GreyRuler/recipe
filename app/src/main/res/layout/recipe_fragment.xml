@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/common_spacing"
+        android:paddingTop="@dimen/common_spacing"
+        android:paddingEnd="@dimen/common_spacing"
+        tools:context=".ui.StartFragment">
+
+        <TextView
+            android:id="@+id/nameRecipe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/common_spacing"
+            android:ellipsize="end"
+            android:singleLine="true"
+            app:layout_constraintBottom_toTopOf="@+id/author"
+            app:layout_constraintEnd_toStartOf="@id/options"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Варёная картошка" />
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            app:layout_constraintBottom_toTopOf="@+id/categories"
+            app:layout_constraintEnd_toEndOf="@+id/nameRecipe"
+            app:layout_constraintStart_toStartOf="@+id/nameRecipe"
+            app:layout_constraintTop_toBottomOf="@+id/nameRecipe"
+            tools:text="Me" />
+
+        <TextView
+            android:id="@+id/categories"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            app:layout_constraintBottom_toTopOf="@+id/headerBarrier"
+            app:layout_constraintEnd_toEndOf="@+id/nameRecipe"
+            app:layout_constraintStart_toStartOf="@+id/nameRecipe"
+            app:layout_constraintTop_toBottomOf="@+id/author"
+            tools:text="Русская" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/options"
+            style="@style/Widget.AppTheme.OptionsCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/button"
+            app:iconGravity="textEnd"
+            app:iconPadding="0dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/author"
+            app:layout_constraintBottom_toBottomOf="@id/headerBarrier"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/headerBarrier"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="bottom"
+            app:barrierMargin="@dimen/common_spacing"
+            app:constraint_referenced_ids="nameRecipe, author, categories, options" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/titleIngredients"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/common_spacing"-->
+<!--            android:text="Состав"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/headerBarrier" />-->
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/ingredientsRecyclerView"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/common_spacing"-->
+<!--            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/titleIngredients"-->
+<!--            tools:listitem="@layout/point_recipe" />-->
+
+        <TextView
+            android:id="@+id/titlePointRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/common_spacing"
+            android:text="Шаги по приготовлению"
+            app:layout_constraintTop_toBottomOf="@id/headerBarrier" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cookingStagesRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="@+id/footerBarrier"
+            app:layout_constraintTop_toBottomOf="@id/titlePointRecipe"
+            tools:listitem="@layout/point_recipe" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/footerBarrier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:barrierMargin="@dimen/common_spacing"
+            app:constraint_referenced_ids="cookingStagesRecyclerView" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/favorite"
+            style="@style/Widget.AppTheme.LikeCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:contentDescription="@string/like"
+            app:iconGravity="textEnd"
+            app:iconPadding="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/footerBarrier" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

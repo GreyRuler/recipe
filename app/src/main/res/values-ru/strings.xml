@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">НМедиа</string>
+    <string name="nmedia">НМедиа!</string>
+    <string name="author_avatar">Аватар автора</string>
+    <string name="button">Кнопка</string>
+    <string name="like">Лайкнуть</string>
+    <string name="share">Поделиться</string>
+    <string name="visibility">Просмотры</string>
+    <string name="remove">Удалить</string>
+    <string name="menu_edit">Изменить</string>
+    <string name="post_text">Текст поста</string>
+    <string name="description_post_like">Нравится</string>
+    <string name="edit_message">Редактирование</string>
+    <string name="chooser_share_post">Поделиться</string>
+    <string name="add_post">Добавить пост</string>
+    <string name="description_post_save">Сохранить</string>
+    <string name="play_video">Воспроизвести видео</string>
+    <string name="preview_video">Превью для видео</string>
+    <string name="url">Ссылка</string>
+    <string name="inputField">Введите текст поста…</string>
+    <string name="notification_user_liked">%1$s поставил лайк посту %2$s</string>
+    <string name="channel_remote_name">Уведомления с сервера</string>
+    <string name="channel_remote_description">Уведомления с удалённого сервера</string>
+    <string name="notification_user_post">%1$s опубликовал новый пост:</string>
+</resources>

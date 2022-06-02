@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/startFragment">
+
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="ru.netology.nmedia.ui.StartFragment"
+        tools:layout="@layout/start_fragment">
+        <action
+            android:id="@+id/toRecipeContentFragment"
+            app:destination="@id/recipeContentFragment" />
+        <action
+            android:id="@+id/toRecipeFragment"
+            app:destination="@id/recipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recipeContentFragment"
+        android:name="ru.netology.nmedia.ui.RecipeContentFragment"
+        tools:layout="@layout/recipe_content_fragment">
+        <argument
+            android:name="recipeWithCookingStages"
+            app:argType="ru.netology.nmedia.data.RecipeWithCookingStages"
+            app:nullable="true" />
+        <argument
+            android:name="requestKey"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/recipeFragment"
+        android:name="ru.netology.nmedia.ui.RecipeFragment"
+        tools:layout="@layout/recipe_fragment">
+        <action
+            android:id="@+id/toRecipeContentFragment"
+            app:destination="@id/recipeContentFragment" />
+        <argument
+            android:name="recipeWithCookingStages"
+            app:argType="ru.netology.nmedia.data.RecipeWithCookingStages" />
+    </fragment>
+
+</navigation>
