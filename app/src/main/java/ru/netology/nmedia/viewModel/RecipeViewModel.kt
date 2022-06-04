@@ -20,7 +20,6 @@ class RecipeViewModel(
 
     val data by repository::data
 
-    val sharePostContent = SingleLiveEvent<String>()
     val navigateToRecipeContentScreen = SingleLiveEvent<RecipeWithCookingStages>()
     val backRemovedListener = SingleLiveEvent<RecipeWithCookingStages>()
     private val currentRecipeWithCookingStages = MutableLiveData<RecipeWithCookingStages?>(null)

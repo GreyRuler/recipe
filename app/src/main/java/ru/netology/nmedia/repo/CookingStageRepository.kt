@@ -1,15 +1,14 @@
 package ru.netology.nmedia.repo
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import ru.netology.nmedia.data.CookingStage
-import ru.netology.nmedia.data.RecipeWithCookingStages
 
 interface CookingStageRepository {
 
-    val data: LiveData<List<RecipeWithCookingStages>>
+    val data: MutableLiveData<List<CookingStage>>
 
-    fun add(recipeId: Long, cookingStage: CookingStage)
-    fun delete(recipeId: Long, cookingStageId: Long)
+    fun addCookingStage(recipeId: Long)
+    fun deleteCookingStage(cookingStageId: Long)
 
     companion object {
         const val NEW_COOKING_STAGE_ID = 0L

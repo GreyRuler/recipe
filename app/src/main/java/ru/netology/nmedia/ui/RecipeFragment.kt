@@ -24,21 +24,8 @@ class RecipeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.sharePostContent.observe(this) { postContent ->
-            val intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, postContent)
-                type = "text/plain"
-            }
-
-            val shareIntent = Intent.createChooser(
-                intent, getString(R.string.chooser_share_post)
-            )
-            startActivity(shareIntent)
-        }
-
         setFragmentResultListener(
-            requestKey = RecipeContentFragment.REQUEST_KEY_START_FRAGMENT
+            requestKey = RecipeContentFragment.REQUEST_KEY_RECIPE_FRAGMENT
         ) { requestKey, bundle ->
             if (requestKey != RecipeContentFragment.REQUEST_KEY_START_FRAGMENT) return@setFragmentResultListener
             val nameRecipe = bundle.getString(
@@ -55,9 +42,7 @@ class RecipeFragment : Fragment() {
 
         viewModel.navigateToRecipeContentScreen.observe(this) { recipe ->
             val direction = RecipeFragmentDirections
-                .toRecipeContentFragment(
-                    recipe,
-                    "requestKeyPostFragment")
+                .toRecipeContentFragment(recipe,"requestKeyRecipeFragment")
             findNavController().navigate(direction)
         }
 

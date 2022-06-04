@@ -2,7 +2,7 @@ package ru.netology.nmedia.repo.impl
 
 import android.app.Application
 import androidx.lifecycle.map
-import ru.netology.nmedia.data.Recipe
+import ru.netology.nmedia.data.CookingStage
 import ru.netology.nmedia.data.RecipeWithCookingStages
 import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.db.PostDao

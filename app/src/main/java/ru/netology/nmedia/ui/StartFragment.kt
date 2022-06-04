@@ -40,7 +40,7 @@ class StartFragment : Fragment() {
 
         viewModel.navigateToRecipeContentScreen.observe(this) { recipeWithCookingStages ->
             val direction = StartFragmentDirections
-                .toRecipeContentFragment(recipeWithCookingStages, "requestKeyFeedFragment")
+                .toRecipeContentFragment(recipeWithCookingStages, RecipeContentFragment.REQUEST_KEY_START_FRAGMENT)
             findNavController().navigate(direction)
         }
 
@@ -59,8 +59,8 @@ class StartFragment : Fragment() {
     ).also { binding ->
         val adapter = RecipesAdapter(viewModel)
         binding.postsRecyclerView.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            adapter.submitList(posts)
+        viewModel.data.observe(viewLifecycleOwner) { recipeWithCookingStages ->
+            adapter.submitList(recipeWithCookingStages)
         }
         binding.fab.setOnClickListener {
             viewModel.onAddClicked()

@@ -3,15 +3,11 @@ package ru.netology.nmedia.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import ru.netology.nmedia.data.Recipe
-import ru.netology.nmedia.R
 import ru.netology.nmedia.data.CookingStage
 import ru.netology.nmedia.databinding.EditDescriptionBinding
-import ru.netology.nmedia.databinding.RecipeFragmentBinding
 
 internal class EditCookingStagesAdapter(
     private val interactionListener: CookingStageInteractionListener
@@ -36,13 +32,20 @@ internal class EditCookingStagesAdapter(
 
         init {
             with(binding) {
+                editPreparation.setOnFocusChangeListener { _, hasFocus ->
+                    if (!hasFocus) {
+                        cookingStage.name = editPreparation.text.toString()
+                    }
+                }
                 close.setOnClickListener {
-                    listener.onRemoveClicked(cookingStage.recipeId, cookingStage.id)
+                    close.visibility = View.GONE
+                    add.visibility = View.VISIBLE
+                    listener.onRemoveClicked(cookingStage.id)
                 }
                 add.setOnClickListener {
                     close.visibility = View.VISIBLE
                     add.visibility = View.GONE
-                    listener.onAddClicked(cookingStage.recipeId, cookingStage)
+                    listener.onAddClicked(cookingStage.recipeId)
                 }
             }
         }

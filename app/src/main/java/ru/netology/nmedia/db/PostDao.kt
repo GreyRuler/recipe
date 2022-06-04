@@ -26,8 +26,8 @@ interface PostDao {
     @Transaction
     fun insert(recipeWithCookingStagesEntity: RecipeWithCookingStagesEntity) {
         insert(recipeWithCookingStagesEntity.recipe)
-        for (cookingStage in recipeWithCookingStagesEntity.cookingStages) {
-            insert(cookingStage)
+        recipeWithCookingStagesEntity.cookingStages.forEach {
+            insert(it)
         }
     }
 

@@ -1,6 +1,7 @@
 package ru.netology.nmedia.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -9,13 +10,22 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ru.netology.nmedia.adapter.EditCookingStagesAdapter
+import ru.netology.nmedia.adapter.RecipesAdapter
+import ru.netology.nmedia.data.CookingStage
 import ru.netology.nmedia.databinding.RecipeContentFragmentBinding
+import ru.netology.nmedia.repo.RecipeRepository
+import ru.netology.nmedia.util.viewModelsFactory
 import ru.netology.nmedia.viewModel.CookingStageViewModel
 
 class RecipeContentFragment : Fragment() {
 
     private val args by navArgs<RecipeContentFragmentArgs>()
-    private val viewModel by viewModels<CookingStageViewModel>()
+    private val viewModel by viewModelsFactory {
+        CookingStageViewModel(
+            args.recipeWithCookingStages?.cookingStages,
+            args.recipeWithCookingStages?.recipe?.id
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,13 +33,20 @@ class RecipeContentFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = RecipeContentFragmentBinding.inflate(
         layoutInflater, container, false
-    ).apply {
-        editNameRecipe.setText(args.recipeWithCookingStages?.recipe?.nameRecipe)
-        editCategories.setText(args.recipeWithCookingStages?.recipe?.category)
-        editCookingStageRecyclerView.adapter = EditCookingStagesAdapter(viewModel)
-        editNameRecipe.requestFocus()
-        ok.setOnClickListener {
-            onOkButtonClicked(this)
+    ).also { binding ->
+        binding.editNameRecipe.setText(args.recipeWithCookingStages?.recipe?.nameRecipe)
+        binding.editCategories.setText(args.recipeWithCookingStages?.recipe?.category)
+
+        val adapter = EditCookingStagesAdapter(viewModel)
+        binding.editCookingStageRecyclerView.adapter = adapter
+        viewModel.data.observe(viewLifecycleOwner) { cookingStages ->
+            Log.d("Update subList adapter", cookingStages.toString())
+            adapter.submitList(cookingStages)
+        }
+
+        binding.editNameRecipe.requestFocus()
+        binding.ok.setOnClickListener {
+            onOkButtonClicked(binding)
         }
     }.root
 
@@ -37,6 +54,9 @@ class RecipeContentFragment : Fragment() {
         val nameRecipe = binding.editNameRecipe.text
         val categories = binding.editCategories.text
         val cookingStages = viewModel.data.value
+        Log.d("nameRecipe", nameRecipe.toString())
+        Log.d("cookingStages", cookingStages.toString())
+        Log.d("categories", categories.toString())
         if (!nameRecipe.isNullOrBlank() &&
             !cookingStages.isNullOrEmpty() &&
             !categories.isNullOrBlank()
@@ -52,7 +72,7 @@ class RecipeContentFragment : Fragment() {
 
     companion object {
         const val REQUEST_KEY_START_FRAGMENT = "requestKeyStartFragment"
-        const val REQUEST_KEY_POST_FRAGMENT = "requestKeyPostFragment"
+        const val REQUEST_KEY_RECIPE_FRAGMENT = "requestKeyRecipeFragment"
         const val NAME_RECIPE_KEY = "nemNameRecipe"
         const val COOKING_STAGES_KEY = "newCookingStages"
         const val CATEGORIES_KEY = "newCategories"

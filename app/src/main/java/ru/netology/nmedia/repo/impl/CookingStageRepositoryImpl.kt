@@ -1,47 +1,36 @@
 package ru.netology.nmedia.repo.impl
 
-import android.app.Application
-import androidx.lifecycle.map
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import ru.netology.nmedia.data.CookingStage
-import ru.netology.nmedia.db.AppDb
-import ru.netology.nmedia.db.PostDao
-import ru.netology.nmedia.db.convertion.toModel
 import ru.netology.nmedia.repo.CookingStageRepository
 
 class CookingStageRepositoryImpl(
-    private val dao: PostDao
+    cookingStages: List<CookingStage>
 ) : CookingStageRepository {
 
-    override val data = dao.getRecipeWithCookingStages().map { entities ->
-        entities.map { it.toModel() }
-    }
+    private var nextId = CookingStageRepository.NEW_COOKING_STAGE_ID
 
-    override fun add(recipeId: Long, cookingStage: CookingStage) {
-        data.value?.find { recipeWithCookingStages ->
-            recipeWithCookingStages.recipe.id == recipeId
-        }?.cookingStages?.plus(CookingStage(
-            id = CookingStageRepository.NEW_COOKING_STAGE_ID,
-            recipeId = CookingStageRepository.NEW_COOKING_STAGE_ID,
-            name = ""
-        ))
-    }
-
-    override fun delete(recipeId: Long, cookingStageId: Long) {
-        data.value?.find { recipeWithCookingStages ->
-            recipeWithCookingStages.recipe.id == recipeId
-        }?.cookingStages?.also { cookingStages ->
-            cookingStages.filter {
-                it.id != cookingStageId
-            }
+    private val cookingStages
+        get() = checkNotNull(data.value) {
+            "Data value should not be null"
         }
+
+    override val data: MutableLiveData<List<CookingStage>> = MutableLiveData(cookingStages)
+
+    override fun addCookingStage(recipeId: Long) {
+        data.value = cookingStages + listOf(
+            CookingStage(
+                id = ++nextId,
+                recipeId = recipeId,
+                name = ""
+            )
+        )
     }
 
-    companion object {
-        private var instance: CookingStageRepositoryImpl? = null
-        fun getInstance(app: Application) = instance ?: CookingStageRepositoryImpl(
-            dao = AppDb.getInstance(
-                context = app
-            ).postDao
-        ).also { instance = it }
+    override fun deleteCookingStage(cookingStageId: Long) {
+        Log.d("cookingStages size", cookingStages.size.toString())
+        data.value =
+            if (cookingStages.size > 1) cookingStages.filterNot { it.id == cookingStageId } else return
     }
 }
