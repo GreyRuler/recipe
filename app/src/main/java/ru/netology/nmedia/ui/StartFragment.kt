@@ -1,15 +1,13 @@
 package ru.netology.nmedia.ui
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.RecipesAdapter
 import ru.netology.nmedia.data.CookingStage
 import ru.netology.nmedia.databinding.StartFragmentBinding
@@ -29,13 +27,13 @@ class StartFragment : Fragment() {
             val nameRecipe = bundle.getString(
                 RecipeContentFragment.NAME_RECIPE_KEY
             ) ?: return@setFragmentResultListener
-            val categories = bundle.getString(
-                RecipeContentFragment.CATEGORIES_KEY
+            val category = bundle.getString(
+                RecipeContentFragment.CATEGORY_KEY
             ) ?: return@setFragmentResultListener
             val cookingStages = bundle.getParcelableArrayList<CookingStage>(
                 RecipeContentFragment.COOKING_STAGES_KEY
             ) ?: return@setFragmentResultListener
-            viewModel.onSaveButtonClicked(nameRecipe, categories, cookingStages)
+            viewModel.onSaveButtonClicked(nameRecipe, category, cookingStages)
         }
 
         viewModel.navigateToRecipeContentScreen.observe(this) { recipeWithCookingStages ->

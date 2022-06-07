@@ -1,16 +1,26 @@
 package ru.netology.nmedia.viewModel
 
+import android.app.Application
+import android.content.Context
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import ru.netology.nmedia.adapter.CookingStageInteractionListener
 import ru.netology.nmedia.data.CookingStage
+import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.repo.CookingStageRepository
 import ru.netology.nmedia.repo.RecipeRepository
 import ru.netology.nmedia.repo.impl.CookingStageRepositoryImpl
+import ru.netology.nmedia.repo.impl.RecipeRepositoryImpl
 
 class CookingStageViewModel(
     cookingStages: List<CookingStage>?,
-    recipeId: Long?
+    context: Context
 ) : ViewModel(), CookingStageInteractionListener {
+
+    private var nextCookingStageId = AppDb.getInstance(
+        context = context
+    ).postDao.getMaxIdCookingStage()
 
     private val repository: CookingStageRepository =
         cookingStages?.let {
@@ -18,8 +28,8 @@ class CookingStageViewModel(
         } ?: CookingStageRepositoryImpl(
             listOf(
                 CookingStage(
-                    id = CookingStageRepository.NEW_COOKING_STAGE_ID,
-                    recipeId = recipeId ?: RecipeRepository.NEW_RECIPE_ID,
+                    id = ++nextCookingStageId,
+                    recipeId = RecipeRepository.NEW_RECIPE_ID,
                     name = ""
                 )
             )
@@ -28,7 +38,7 @@ class CookingStageViewModel(
     val data by repository::data
 
     override fun onAddClicked(recipeId: Long) {
-        repository.addCookingStage(recipeId)
+        repository.addCookingStage(++nextCookingStageId)
     }
 
     override fun onRemoveClicked(cookingStageId: Long) {

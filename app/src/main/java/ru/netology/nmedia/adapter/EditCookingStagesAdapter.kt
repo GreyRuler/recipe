@@ -1,8 +1,12 @@
 package ru.netology.nmedia.adapter
 
+import android.opengl.Visibility
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,8 +24,17 @@ internal class EditCookingStagesAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        when(getItemViewType(position)) {
+            HEAD -> holder.bind(getItem(position), true)
+            LIST -> holder.bind(getItem(position), false)
+        }
     }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == itemCount - 1) HEAD else LIST
+    }
+
+    override fun getItemCount() = currentList.size
 
     class ViewHolder(
         private val binding: EditDescriptionBinding,
@@ -32,28 +45,29 @@ internal class EditCookingStagesAdapter(
 
         init {
             with(binding) {
-                editPreparation.setOnFocusChangeListener { _, hasFocus ->
-                    if (!hasFocus) {
-                        cookingStage.name = editPreparation.text.toString()
-                    }
+                editPreparation.addTextChangedListener {
+                    cookingStage.name = it.toString()
                 }
                 close.setOnClickListener {
-                    close.visibility = View.GONE
-                    add.visibility = View.VISIBLE
                     listener.onRemoveClicked(cookingStage.id)
                 }
                 add.setOnClickListener {
-                    close.visibility = View.VISIBLE
-                    add.visibility = View.GONE
                     listener.onAddClicked(cookingStage.recipeId)
                 }
             }
         }
 
-        fun bind(cookingStage: CookingStage) {
+        fun bind(cookingStage: CookingStage, visibility: Boolean) {
             this.cookingStage = cookingStage
             with(binding) {
                 editPreparation.setText(cookingStage.name)
+                if (visibility) {
+                    add.visibility = View.VISIBLE
+                    close.visibility = View.GONE
+                } else {
+                    add.visibility = View.GONE
+                    close.visibility = View.VISIBLE
+                }
             }
         }
     }
@@ -65,5 +79,10 @@ internal class EditCookingStagesAdapter(
 
         override fun areContentsTheSame(oldItem: CookingStage, newItem: CookingStage) =
             oldItem == newItem
+    }
+
+    companion object {
+        const val HEAD = 1
+        const val LIST = 0
     }
 }

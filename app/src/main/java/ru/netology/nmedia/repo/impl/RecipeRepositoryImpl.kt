@@ -19,13 +19,7 @@ class RecipeRepositoryImpl(
     }
 
     override fun save(recipeWithCookingStages: RecipeWithCookingStages) {
-        if (recipeWithCookingStages.recipe.id == RecipeRepository.NEW_RECIPE_ID) dao.insert(recipeWithCookingStages.toEntity())
-        else dao.updateContentById(
-            recipeWithCookingStages.recipe.id,
-            recipeWithCookingStages.recipe.author,
-            recipeWithCookingStages.recipe.nameRecipe,
-            recipeWithCookingStages.recipe.category
-        )
+        dao.insert(recipeWithCookingStages.toEntity())
     }
 
     override fun like(recipeId: Long) = dao.likeById(recipeId)

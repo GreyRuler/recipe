@@ -3,7 +3,7 @@ package ru.netology.nmedia.adapter
 import ru.netology.nmedia.data.Recipe
 import ru.netology.nmedia.data.RecipeWithCookingStages
 
-interface PostInteractionListener {
+interface RecipeInteractionListener {
 
     fun onFavoriteClicked(recipeWithCookingStages: RecipeWithCookingStages)
     fun onRemoveClicked(recipeWithCookingStages: RecipeWithCookingStages)

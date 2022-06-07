@@ -6,14 +6,12 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import ru.netology.nmedia.data.Recipe
 import ru.netology.nmedia.R
-import ru.netology.nmedia.data.Categories
 import ru.netology.nmedia.data.RecipeWithCookingStages
 import ru.netology.nmedia.databinding.RecipeFragmentBinding
 
 internal class RecipesAdapter(
-    private val interactionListener: PostInteractionListener
+    private val interactionListener: RecipeInteractionListener
 ) : ListAdapter<RecipeWithCookingStages, RecipesAdapter.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,7 +26,7 @@ internal class RecipesAdapter(
 
     class ViewHolder(
         private val binding: RecipeFragmentBinding,
-        listener: PostInteractionListener
+        listener: RecipeInteractionListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var recipeWithCookingStages: RecipeWithCookingStages
@@ -58,9 +56,9 @@ internal class RecipesAdapter(
 
         init {
             with(binding) {
-//                like.setOnClickListener {
-//                    listener.onLikeClicked(post)
-//                }
+                favorite.setOnClickListener {
+                    listener.onFavoriteClicked(recipeWithCookingStages)
+                }
                 options.setOnClickListener { popupMenu.show() }
                 cardPost.setOnClickListener {
                     listener.onRecipeWithCookingStagesClicked(
@@ -76,11 +74,11 @@ internal class RecipesAdapter(
                 nameRecipe.text = recipeWithCookingStages.recipe.nameRecipe
                 author.text = recipeWithCookingStages.recipe.author
 //                ingredientsRecyclerView.adapter = CookingStagesAdapter(recipe.ingredients)
-                categories.text = Categories.European.title
+                categories.text = recipeWithCookingStages.recipe.category
                 cookingStagesRecyclerView.adapter = CookingStagesAdapter(
                     recipeWithCookingStages.cookingStages
                 )
-//                favorite.isChecked = recipe.favorite
+                favorite.isChecked = recipeWithCookingStages.recipe.favorite
             }
         }
     }

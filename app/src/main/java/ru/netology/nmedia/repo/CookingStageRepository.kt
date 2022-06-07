@@ -7,10 +7,6 @@ interface CookingStageRepository {
 
     val data: MutableLiveData<List<CookingStage>>
 
-    fun addCookingStage(recipeId: Long)
+    fun addCookingStage(nextCookingStageId: Long)
     fun deleteCookingStage(cookingStageId: Long)
-
-    companion object {
-        const val NEW_COOKING_STAGE_ID = 0L
-    }
 }

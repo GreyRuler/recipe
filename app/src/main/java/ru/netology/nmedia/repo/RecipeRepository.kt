@@ -12,11 +12,8 @@ interface RecipeRepository {
     fun like(recipeId: Long)
     fun delete(recipeId: Long)
     fun save(recipeWithCookingStages: RecipeWithCookingStages)
-//    fun addCookingStage(recipeId: Long, cookingStage: CookingStage)
-//    fun deleteCookingStage(recipeId: Long, cookingStageId: Long)
 
     companion object {
         const val NEW_RECIPE_ID = 0L
-        const val NEW_COOKING_STAGE_ID = 0L
     }
 }

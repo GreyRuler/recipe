@@ -1,10 +1,11 @@
 package ru.netology.nmedia.viewModel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import ru.netology.nmedia.data.Recipe
-import ru.netology.nmedia.adapter.PostInteractionListener
+import ru.netology.nmedia.adapter.RecipeInteractionListener
 import ru.netology.nmedia.data.CookingStage
 import ru.netology.nmedia.data.RecipeWithCookingStages
 import ru.netology.nmedia.repo.RecipeRepository
@@ -13,7 +14,7 @@ import ru.netology.nmedia.util.SingleLiveEvent
 
 class StartViewModel(
     application: Application
-) : AndroidViewModel(application), PostInteractionListener {
+) : AndroidViewModel(application), RecipeInteractionListener {
 
     private val repository: RecipeRepository =
         RecipeRepositoryImpl.getInstance(application)
@@ -26,13 +27,14 @@ class StartViewModel(
 
     fun onSaveButtonClicked(
         nameRecipe: String,
-        categories: String,
+        category: String,
         cookingStages: List<CookingStage>
     ) {
         if (nameRecipe.isBlank()) return
         val recipeWithCookingStages = currentRecipeWithCookingStages.value?.copy(
             recipe = currentRecipeWithCookingStages.value!!.recipe.copy(
-                nameRecipe = nameRecipe
+                nameRecipe = nameRecipe,
+                category = category
             ),
             cookingStages = cookingStages
         ) ?: RecipeWithCookingStages(
@@ -40,7 +42,7 @@ class StartViewModel(
                 id = RecipeRepository.NEW_RECIPE_ID,
                 author = "Me",
                 nameRecipe = nameRecipe,
-                category = categories
+                category = category
             ),
             cookingStages = cookingStages
         )
@@ -64,7 +66,7 @@ class StartViewModel(
     }
 
     override fun onFavoriteClicked(recipeWithCookingStages: RecipeWithCookingStages) {
-        TODO("Not yet implemented")
+        repository.like(recipeWithCookingStages.recipe.id)
     }
 
     override fun onRecipeWithCookingStagesClicked(recipeWithCookingStages: RecipeWithCookingStages) {

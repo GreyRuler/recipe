@@ -14,31 +14,18 @@ interface PostDao {
     fun getRecipeWithCookingStages(): LiveData<List<RecipeWithCookingStagesEntity>>
 
     @Transaction
-    @Query("SELECT * FROM recipes WHERE id = :recipeId")
-    fun getRecipe(recipeId: Long): RecipeWithCookingStagesEntity
-
-//    @Query("SELECT * FROM recipes WHERE recipeId = :recipeId")
-//    fun getCookingStages(recipeId: Long): LiveData<List<CookingStageEntity>>
-
-//    @Insert
-//    fun insert(recipeWithCookingStagesEntity: RecipeWithCookingStagesEntity)
-
-    @Transaction
     fun insert(recipeWithCookingStagesEntity: RecipeWithCookingStagesEntity) {
-        insert(recipeWithCookingStagesEntity.recipe)
+        val insertedRecipeId = insert(recipeWithCookingStagesEntity.recipe)
         recipeWithCookingStagesEntity.cookingStages.forEach {
-            insert(it)
+            insert(it.copy(recipeId = insertedRecipeId))
         }
     }
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(recipe: RecipeEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(cookingStage: CookingStageEntity): Long
-
-    @Query("UPDATE recipes SET author = :author, nameRecipe = :nameRecipe, category = :category WHERE id = :id")
-    fun updateContentById(id: Long, author: String, nameRecipe: String, category: String)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(cookingStages: CookingStageEntity): Long
 
     @Query(
         """
@@ -51,4 +38,10 @@ interface PostDao {
 
     @Query("DELETE FROM recipes WHERE id = :id")
     fun removeById(id: Long)
+
+    @Query("SELECT id FROM cookingStages ORDER BY id DESC LIMIT 1")
+    fun getMaxIdCookingStage(): Long
+
+    @Query("SELECT id FROM recipes ORDER BY id DESC LIMIT 1")
+    fun getMaxIdRecipe(): Long
 }

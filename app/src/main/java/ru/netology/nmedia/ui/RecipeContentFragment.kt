@@ -4,16 +4,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.chip.Chip
 import ru.netology.nmedia.adapter.EditCookingStagesAdapter
-import ru.netology.nmedia.adapter.RecipesAdapter
-import ru.netology.nmedia.data.CookingStage
 import ru.netology.nmedia.databinding.RecipeContentFragmentBinding
-import ru.netology.nmedia.repo.RecipeRepository
 import ru.netology.nmedia.util.viewModelsFactory
 import ru.netology.nmedia.viewModel.CookingStageViewModel
 
@@ -23,7 +21,7 @@ class RecipeContentFragment : Fragment() {
     private val viewModel by viewModelsFactory {
         CookingStageViewModel(
             args.recipeWithCookingStages?.cookingStages,
-            args.recipeWithCookingStages?.recipe?.id
+            requireContext()
         )
     }
 
@@ -35,15 +33,15 @@ class RecipeContentFragment : Fragment() {
         layoutInflater, container, false
     ).also { binding ->
         binding.editNameRecipe.setText(args.recipeWithCookingStages?.recipe?.nameRecipe)
-        binding.editCategories.setText(args.recipeWithCookingStages?.recipe?.category)
-
+        binding.categoriesChipGroup.forEach {
+            if ((it as Chip).text == args.recipeWithCookingStages?.recipe?.category) it.isChecked = true
+        }
         val adapter = EditCookingStagesAdapter(viewModel)
         binding.editCookingStageRecyclerView.adapter = adapter
+
         viewModel.data.observe(viewLifecycleOwner) { cookingStages ->
-            Log.d("Update subList adapter", cookingStages.toString())
             adapter.submitList(cookingStages)
         }
-
         binding.editNameRecipe.requestFocus()
         binding.ok.setOnClickListener {
             onOkButtonClicked(binding)
@@ -51,19 +49,19 @@ class RecipeContentFragment : Fragment() {
     }.root
 
     private fun onOkButtonClicked(binding: RecipeContentFragmentBinding) {
-        val nameRecipe = binding.editNameRecipe.text
-        val categories = binding.editCategories.text
-        val cookingStages = viewModel.data.value
-        Log.d("nameRecipe", nameRecipe.toString())
-        Log.d("cookingStages", cookingStages.toString())
-        Log.d("categories", categories.toString())
-        if (!nameRecipe.isNullOrBlank() &&
+        val nameRecipe = binding.editNameRecipe.text.toString()
+        val category = binding.categoriesChipGroup.findViewById<Chip>(
+            binding.categoriesChipGroup.checkedChipId
+        ).text.toString()
+        Log.d("category", category)
+        val cookingStages = viewModel.data.value?.filter { it.name.isNotBlank() }
+        if (nameRecipe.isNotBlank() &&
             !cookingStages.isNullOrEmpty() &&
-            !categories.isNullOrBlank()
+            category.isNotBlank()
         ) {
             val resultBundle = Bundle(3)
-            resultBundle.putString(NAME_RECIPE_KEY, nameRecipe.toString())
-            resultBundle.putSerializable(CATEGORIES_KEY, categories.toString())
+            resultBundle.putString(NAME_RECIPE_KEY, nameRecipe)
+            resultBundle.putSerializable(CATEGORY_KEY, category)
             resultBundle.putParcelableArrayList(COOKING_STAGES_KEY, ArrayList(cookingStages))
             setFragmentResult(args.requestKey, resultBundle)
         }
@@ -75,6 +73,6 @@ class RecipeContentFragment : Fragment() {
         const val REQUEST_KEY_RECIPE_FRAGMENT = "requestKeyRecipeFragment"
         const val NAME_RECIPE_KEY = "nemNameRecipe"
         const val COOKING_STAGES_KEY = "newCookingStages"
-        const val CATEGORIES_KEY = "newCategories"
+        const val CATEGORY_KEY = "newCategory"
     }
 }
