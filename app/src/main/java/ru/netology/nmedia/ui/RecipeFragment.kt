@@ -58,7 +58,7 @@ class RecipeFragment : Fragment() {
     ) = RecipeFragmentBinding.inflate(
         layoutInflater, container, false
     ).also { binding ->
-        viewModel.data.observe(viewLifecycleOwner) { posts->
+        viewModel.data.observe(viewLifecycleOwner) { posts ->
             val currentPost = posts.find { recipeWithCookingStages ->
                 recipeWithCookingStages.recipe.id == args.recipeWithCookingStages.recipe.id
             }
@@ -66,4 +66,9 @@ class RecipeFragment : Fragment() {
             if (currentPost != null) holder.bind(currentPost)
         }
     }.root
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = StartFragment()
+    }
 }

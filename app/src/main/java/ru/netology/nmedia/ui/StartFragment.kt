@@ -64,4 +64,9 @@ class StartFragment : Fragment() {
             viewModel.onAddClicked()
         }
     }.root
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = StartFragment()
+    }
 }

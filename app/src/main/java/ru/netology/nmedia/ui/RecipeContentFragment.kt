@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.children
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -49,19 +50,18 @@ class RecipeContentFragment : Fragment() {
     }.root
 
     private fun onOkButtonClicked(binding: RecipeContentFragmentBinding) {
-        val nameRecipe = binding.editNameRecipe.text.toString()
+        val nameRecipe = binding.editNameRecipe.text
         val category = binding.categoriesChipGroup.findViewById<Chip>(
             binding.categoriesChipGroup.checkedChipId
-        ).text.toString()
-        Log.d("category", category)
+        )?.text
         val cookingStages = viewModel.data.value?.filter { it.name.isNotBlank() }
-        if (nameRecipe.isNotBlank() &&
+        if (!nameRecipe.isNullOrBlank() &&
             !cookingStages.isNullOrEmpty() &&
-            category.isNotBlank()
+            !category.isNullOrBlank()
         ) {
             val resultBundle = Bundle(3)
-            resultBundle.putString(NAME_RECIPE_KEY, nameRecipe)
-            resultBundle.putSerializable(CATEGORY_KEY, category)
+            resultBundle.putString(NAME_RECIPE_KEY, nameRecipe.toString())
+            resultBundle.putSerializable(CATEGORY_KEY, category.toString())
             resultBundle.putParcelableArrayList(COOKING_STAGES_KEY, ArrayList(cookingStages))
             setFragmentResult(args.requestKey, resultBundle)
         }
@@ -74,5 +74,8 @@ class RecipeContentFragment : Fragment() {
         const val NAME_RECIPE_KEY = "nemNameRecipe"
         const val COOKING_STAGES_KEY = "newCookingStages"
         const val CATEGORY_KEY = "newCategory"
+
+//        @JvmStatic
+//        fun newInstance() = RecipeContentFragment()
     }
 }
