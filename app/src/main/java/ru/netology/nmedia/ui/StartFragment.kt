@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,30 +16,14 @@ import ru.netology.nmedia.viewModel.StartViewModel
 
 class StartFragment : Fragment() {
 
-    private val viewModel by viewModels<StartViewModel>()
+    private val viewModel by activityViewModels<StartViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setFragmentResultListener(
-            requestKey = RecipeContentFragment.REQUEST_KEY_START_FRAGMENT
-        ) { requestKey, bundle ->
-            if (requestKey != RecipeContentFragment.REQUEST_KEY_START_FRAGMENT) return@setFragmentResultListener
-            val nameRecipe = bundle.getString(
-                RecipeContentFragment.NAME_RECIPE_KEY
-            ) ?: return@setFragmentResultListener
-            val category = bundle.getString(
-                RecipeContentFragment.CATEGORY_KEY
-            ) ?: return@setFragmentResultListener
-            val cookingStages = bundle.getParcelableArrayList<CookingStage>(
-                RecipeContentFragment.COOKING_STAGES_KEY
-            ) ?: return@setFragmentResultListener
-            viewModel.onSaveButtonClicked(nameRecipe, category, cookingStages)
-        }
-
         viewModel.navigateToRecipeContentScreen.observe(this) { recipeWithCookingStages ->
             val direction = StartFragmentDirections
-                .toRecipeContentFragment(recipeWithCookingStages, RecipeContentFragment.REQUEST_KEY_START_FRAGMENT)
+                .toRecipeContentFragment(recipeWithCookingStages, RecipeContentFragment.REQUEST_KEY_MAIN_FRAGMENT)
             findNavController().navigate(direction)
         }
 
@@ -59,9 +44,6 @@ class StartFragment : Fragment() {
         binding.postsRecyclerView.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { recipeWithCookingStages ->
             adapter.submitList(recipeWithCookingStages)
-        }
-        binding.fab.setOnClickListener {
-            viewModel.onAddClicked()
         }
     }.root
 

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/startFragment">
+    app:startDestination="@id/mainFragment">
 
     <fragment
         android:id="@+id/startFragment"
@@ -11,7 +11,8 @@
         tools:layout="@layout/start_fragment">
         <action
             android:id="@+id/toRecipeContentFragment"
-            app:destination="@id/recipeContentFragment" />
+            app:destination="@id/recipeContentFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/toRecipeFragment"
             app:destination="@id/recipeFragment" />
@@ -38,6 +39,18 @@
         <argument
             android:name="recipeWithCookingStages"
             app:argType="ru.netology.nmedia.data.RecipeWithCookingStages" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="ru.netology.nmedia.ui.MainFragment"
+        android:label="main_fragment"
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/toRecipeContentFragment"
+            app:destination="@id/recipeContentFragment" />
+        <action
+            android:id="@+id/toRecipeFragment"
+            app:destination="@id/recipeFragment" />
     </fragment>
 
 </navigation>

@@ -30,7 +30,6 @@ class StartViewModel(
         category: String,
         cookingStages: List<CookingStage>
     ) {
-        if (nameRecipe.isBlank()) return
         val recipeWithCookingStages = currentRecipeWithCookingStages.value?.copy(
             recipe = currentRecipeWithCookingStages.value!!.recipe.copy(
                 nameRecipe = nameRecipe,

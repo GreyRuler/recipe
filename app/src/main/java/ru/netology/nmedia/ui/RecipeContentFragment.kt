@@ -69,6 +69,7 @@ class RecipeContentFragment : Fragment() {
     }
 
     companion object {
+        const val REQUEST_KEY_MAIN_FRAGMENT = "requestKeyMainFragment"
         const val REQUEST_KEY_START_FRAGMENT = "requestKeyStartFragment"
         const val REQUEST_KEY_RECIPE_FRAGMENT = "requestKeyRecipeFragment"
         const val NAME_RECIPE_KEY = "nemNameRecipe"

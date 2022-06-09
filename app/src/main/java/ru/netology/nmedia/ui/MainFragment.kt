@@ -1,30 +1,33 @@
 package ru.netology.nmedia.ui
 
+
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import ru.netology.nmedia.adapter.RecipesAdapter
+import com.google.android.material.tabs.TabLayoutMediator
+import ru.netology.nmedia.adapter.AppViewPagerAdapter
 import ru.netology.nmedia.data.CookingStage
-import ru.netology.nmedia.databinding.RecipeFragmentBinding
-import ru.netology.nmedia.viewModel.RecipeViewModel
+import ru.netology.nmedia.databinding.MainFragmentBinding
+import ru.netology.nmedia.viewModel.StartViewModel
 
-class RecipeFragment : Fragment() {
 
-    private val args by navArgs<RecipeFragmentArgs>()
-    private val viewModel by viewModels<RecipeViewModel>()
+class MainFragment : Fragment() {
+
+    private val viewModel by activityViewModels<StartViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setFragmentResultListener(
-            requestKey = RecipeContentFragment.REQUEST_KEY_RECIPE_FRAGMENT
+            requestKey = RecipeContentFragment.REQUEST_KEY_MAIN_FRAGMENT
         ) { requestKey, bundle ->
-            if (requestKey != RecipeContentFragment.REQUEST_KEY_RECIPE_FRAGMENT) return@setFragmentResultListener
+            if (requestKey != RecipeContentFragment.REQUEST_KEY_MAIN_FRAGMENT) return@setFragmentResultListener
             val nameRecipe = bundle.getString(
                 RecipeContentFragment.NAME_RECIPE_KEY
             ) ?: return@setFragmentResultListener
@@ -38,16 +41,9 @@ class RecipeFragment : Fragment() {
         }
 
         viewModel.navigateToRecipeContentScreen.observe(this) { recipeWithCookingStages ->
-            val direction = RecipeFragmentDirections
-                .toRecipeContentFragment(
-                    recipeWithCookingStages,
-                    RecipeContentFragment.REQUEST_KEY_RECIPE_FRAGMENT
-                )
+            val direction = MainFragmentDirections
+                .toRecipeContentFragment(recipeWithCookingStages, RecipeContentFragment.REQUEST_KEY_MAIN_FRAGMENT)
             findNavController().navigate(direction)
-        }
-
-        viewModel.backRemovedListener.observe(this) {
-            findNavController().popBackStack()
         }
     }
 
@@ -55,15 +51,27 @@ class RecipeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = RecipeFragmentBinding.inflate(
+    ) = MainFragmentBinding.inflate(
         layoutInflater, container, false
     ).also { binding ->
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            val currentPost = posts.find { recipeWithCookingStages ->
-                recipeWithCookingStages.recipe.id == args.recipeWithCookingStages.recipe.id
+        val fragments = listOf(
+            StartFragment.newInstance(),
+            StartFragment.newInstance()
+        )
+        val adapter = AppViewPagerAdapter(
+            requireActivity().supportFragmentManager,
+            lifecycle,
+            fragments
+        )
+        binding.viewPagerApp.adapter = adapter
+        TabLayoutMediator(binding.tabLayoutApp, binding.viewPagerApp) { tab, position ->
+            when (position) {
+                0 -> tab.text = "Первый"
+                1 -> tab.text = "Второй"
             }
-            val holder = RecipesAdapter.ViewHolder(binding, viewModel)
-            if (currentPost != null) holder.bind(currentPost)
+        }.attach()
+        binding.fab.setOnClickListener {
+            viewModel.onAddClicked()
         }
     }.root
 }
