@@ -12,7 +12,7 @@
         android:paddingStart="@dimen/common_spacing"
         android:paddingTop="@dimen/common_spacing"
         android:paddingEnd="@dimen/common_spacing"
-        tools:context=".ui.StartFragment">
+        tools:context=".ui.AbstractRecipeFragment">
 
         <TextView
             android:id="@+id/nameRecipe"

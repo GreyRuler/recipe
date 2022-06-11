@@ -24,7 +24,8 @@ class RecipeFragment : Fragment() {
         setFragmentResultListener(
             requestKey = RecipeContentFragment.REQUEST_KEY_RECIPE_FRAGMENT
         ) { requestKey, bundle ->
-            if (requestKey != RecipeContentFragment.REQUEST_KEY_RECIPE_FRAGMENT) return@setFragmentResultListener
+            if (requestKey != RecipeContentFragment.REQUEST_KEY_RECIPE_FRAGMENT)
+                return@setFragmentResultListener
             val nameRecipe = bundle.getString(
                 RecipeContentFragment.NAME_RECIPE_KEY
             ) ?: return@setFragmentResultListener
@@ -37,7 +38,8 @@ class RecipeFragment : Fragment() {
             viewModel.onSaveButtonClicked(nameRecipe, category, cookingStages)
         }
 
-        viewModel.navigateToRecipeContentScreen.observe(this) { recipeWithCookingStages ->
+        viewModel.navigateToRecipeContentScreen.observe(this) {
+                recipeWithCookingStages ->
             val direction = RecipeFragmentDirections
                 .toRecipeContentFragment(
                     recipeWithCookingStages,

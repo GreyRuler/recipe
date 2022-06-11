@@ -15,6 +15,10 @@ interface PostDao {
     fun getRecipeWithCookingStages(): LiveData<List<RecipeWithCookingStagesEntity>>
 
     @Transaction
+    @Query("SELECT * FROM recipes WHERE favorite = 1")
+    fun getFavoriteRecipeWithCookingStages(): LiveData<List<RecipeWithCookingStagesEntity>>
+
+    @Transaction
     fun insert(recipeWithCookingStagesEntity: RecipeWithCookingStagesEntity) {
         val insertedRecipeId = insert(recipeWithCookingStagesEntity.recipe)
         recipeWithCookingStagesEntity.cookingStages.forEach {

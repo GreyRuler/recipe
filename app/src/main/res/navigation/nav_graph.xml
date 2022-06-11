@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/startFragment"
-        android:name="ru.netology.nmedia.ui.StartFragment"
+        android:name="ru.netology.nmedia.ui.AbstractRecipeFragment"
         tools:layout="@layout/start_fragment">
         <action
             android:id="@+id/toRecipeContentFragment"
