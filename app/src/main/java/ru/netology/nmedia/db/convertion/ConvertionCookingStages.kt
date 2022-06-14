@@ -6,11 +6,13 @@ import ru.netology.nmedia.db.entity.CookingStageEntity
 internal fun CookingStageEntity.toModel() = CookingStage(
     id = id,
     recipeId = recipeId,
-    name = name
+    name = name,
+    pathImage = pathImage
 )
 
 internal fun CookingStage.toEntity() = CookingStageEntity(
     id = id,
     recipeId = recipeId,
-    name = name
+    name = name,
+    pathImage = pathImage
 )

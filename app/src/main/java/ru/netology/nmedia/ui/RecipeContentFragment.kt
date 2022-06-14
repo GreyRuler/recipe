@@ -1,13 +1,19 @@
 package ru.netology.nmedia.ui
 
+import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import ru.netology.nmedia.adapter.EditCookingStagesAdapter
 import ru.netology.nmedia.databinding.RecipeContentFragmentBinding
@@ -17,13 +23,24 @@ import ru.netology.nmedia.viewModel.CookingStageViewModel
 class RecipeContentFragment : Fragment() {
 
     private val args by navArgs<RecipeContentFragmentArgs>()
-    private val viewModel by viewModelsFactory {
+    val viewModel by viewModelsFactory {
         CookingStageViewModel(
             args.recipeWithCookingStages?.cookingStages,
-            requireContext()
+            requireContext(),
+            selectImageFromGalleryResult
         )
     }
 
+    private val selectImageFromGalleryResult: ActivityResultLauncher<String> =
+        registerForActivityResult(
+            ActivityResultContracts.GetContent()
+        ) { uri: Uri? ->
+            uri?.let {
+                viewModel.onSelectImageClicked(uri, requireContext())
+            }
+        }
+
+    //    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,8 +56,30 @@ class RecipeContentFragment : Fragment() {
         val adapter = EditCookingStagesAdapter(viewModel)
         binding.editCookingStageRecyclerView.adapter = adapter
 
+        adapter.registerAdapterDataObserver(
+            object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(
+                    positionStart: Int,
+                    itemCount: Int
+                ) {
+                    binding.editCookingStageRecyclerView
+                        .smoothScrollToPosition(itemCount - 1)
+                }
+
+                override fun onItemRangeRemoved(
+                    positionStart: Int,
+                    itemCount: Int
+                ) {
+                    binding.editCookingStageRecyclerView
+                        .smoothScrollToPosition(itemCount)
+                }
+            }
+        )
+
         viewModel.data.observe(viewLifecycleOwner) { cookingStages ->
+//            adapter.submitList(null)
             adapter.submitList(cookingStages)
+            adapter.notifyDataSetChanged()
         }
         binding.editNameRecipe.requestFocus()
         binding.ok.setOnClickListener {

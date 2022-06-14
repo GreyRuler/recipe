@@ -24,5 +24,7 @@ data class CookingStageEntity(
     @ColumnInfo(name = "recipeId")
     val recipeId: Long,
     @ColumnInfo(name = "name")
-    val name: String
+    val name: String,
+    @ColumnInfo(name = "image")
+    val pathImage: String?
 )

@@ -1,14 +1,21 @@
 package ru.netology.nmedia.repo.impl
 
-import android.app.Application
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import ru.netology.nmedia.data.CookingStage
-import ru.netology.nmedia.db.AppDb
-import ru.netology.nmedia.db.PostDao
 import ru.netology.nmedia.repo.CookingStageRepository
 import ru.netology.nmedia.repo.RecipeRepository
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CookingStageRepositoryImpl(
     cookingStages: List<CookingStage>
@@ -19,15 +26,16 @@ class CookingStageRepositoryImpl(
             "Data value should not be null"
         }
 
-    override val data: MutableLiveData<List<CookingStage>> = MutableLiveData(cookingStages)
+    override val data: MutableLiveData<List<CookingStage>> =
+        MutableLiveData(cookingStages)
 
     override fun addCookingStage(nextCookingStageId: Long) {
-        Log.d("nextId", nextCookingStageId.toString())
-        data.value =  cookingStages + listOf(
+        data.value = cookingStages + listOf(
             CookingStage(
                 id = nextCookingStageId,
                 recipeId = RecipeRepository.NEW_RECIPE_ID,
-                name = ""
+                name = "",
+                pathImage = null
             )
         )
     }
@@ -37,4 +45,42 @@ class CookingStageRepositoryImpl(
             it.id == cookingStageId
         } else return
     }
+
+    override fun saveImage(uri: Uri, context: Context): String {
+        val bitmap = if (Build.VERSION.SDK_INT < 28) {
+            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+        } else {
+            val source = ImageDecoder.createSource(context.contentResolver, uri)
+            ImageDecoder.decodeBitmap(source)
+        }
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(
+            Date()
+        )
+        val storageDir = context.filesDir
+        val tmpFile = File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        )
+        val fileOutputStream = FileOutputStream(tmpFile)
+        try {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                fileOutputStream.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        return tmpFile.path
+    }
+
+    override fun selectImage(uri: Uri, context: Context, cookingStageId: Long) {
+        data.value = cookingStages.apply {
+            find { it.id == cookingStageId }?.pathImage = saveImage(uri, context)
+        }
+    }
+
 }

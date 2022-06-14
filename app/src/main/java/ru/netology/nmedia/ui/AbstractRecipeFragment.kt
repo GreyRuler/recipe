@@ -58,8 +58,6 @@ abstract class AbstractRecipeFragment : Fragment() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    // inside on query text change method we are
-                    // calling a method to filter our recycler view.
                     viewModel.onSearchClicked(newText)
                     return false
                 }

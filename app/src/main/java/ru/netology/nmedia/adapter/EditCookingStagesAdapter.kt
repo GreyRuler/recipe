@@ -1,7 +1,6 @@
 package ru.netology.nmedia.adapter
 
-import android.opengl.Visibility
-import android.text.TextWatcher
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.data.CookingStage
 import ru.netology.nmedia.databinding.EditDescriptionBinding
 
+
 internal class EditCookingStagesAdapter(
     private val interactionListener: CookingStageInteractionListener
-) : ListAdapter<CookingStage, EditCookingStagesAdapter.ViewHolder>(DiffCallback) {
+) : ListAdapter<CookingStage, EditCookingStagesAdapter.ViewHolder>(DiffCallback)  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,7 +24,7 @@ internal class EditCookingStagesAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        when(getItemViewType(position)) {
+        when (getItemViewType(position)) {
             HEAD -> holder.bind(getItem(position), true)
             LIST -> holder.bind(getItem(position), false)
         }
@@ -35,6 +35,10 @@ internal class EditCookingStagesAdapter(
     }
 
     override fun getItemCount() = currentList.size
+
+//    override fun submitList(list: List<CookingStage>?) {
+//        super.submitList(list?.let { ArrayList(it) })
+//    }
 
     class ViewHolder(
         private val binding: EditDescriptionBinding,
@@ -48,11 +52,14 @@ internal class EditCookingStagesAdapter(
                 editPreparation.addTextChangedListener {
                     cookingStage.name = it.toString()
                 }
-                close.setOnClickListener {
+                closeButton.setOnClickListener {
                     listener.onRemoveClicked(cookingStage.id)
                 }
-                add.setOnClickListener {
+                addButton.setOnClickListener {
                     listener.onAddClicked(cookingStage.recipeId)
+                }
+                attachButton.setOnClickListener {
+                    listener.onAttachClicked(cookingStage.id)
                 }
             }
         }
@@ -62,12 +69,16 @@ internal class EditCookingStagesAdapter(
             with(binding) {
                 editPreparation.setText(cookingStage.name)
                 if (visibility) {
-                    add.visibility = View.VISIBLE
-                    close.visibility = View.GONE
+                    addButton.visibility = View.VISIBLE
+                    closeButton.visibility = View.GONE
                 } else {
-                    add.visibility = View.GONE
-                    close.visibility = View.VISIBLE
+                    addButton.visibility = View.GONE
+                    closeButton.visibility = View.VISIBLE
                 }
+                if (cookingStage.pathImage != null) {
+                    imagePreview.setImageURI(Uri.parse(cookingStage.pathImage))
+                    imagePreview.visibility = View.VISIBLE
+                } else imagePreview.visibility = View.GONE
             }
         }
     }

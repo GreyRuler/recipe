@@ -58,6 +58,13 @@
         <item name="android:minHeight">@dimen/normal_spacing</item>
     </style>
 
+    <style name="Widget.AppTheme.AttachButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="icon">@drawable/ic_attach_file_24dp</item>
+        <item name="iconTint">@color/close_tint</item>
+        <item name="android:minWidth">@dimen/normal_spacing</item>
+        <item name="android:minHeight">@dimen/normal_spacing</item>
+    </style>
+
     <style name="cursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable">@drawable/cursor</item>
     </style>
