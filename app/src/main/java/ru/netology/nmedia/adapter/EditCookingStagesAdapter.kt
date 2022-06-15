@@ -1,7 +1,6 @@
 package ru.netology.nmedia.adapter
 
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +58,10 @@ internal class EditCookingStagesAdapter(
                     listener.onAddClicked(cookingStage.recipeId)
                 }
                 attachButton.setOnClickListener {
-                    listener.onAttachClicked(cookingStage.id)
+                    listener.onAttachImageClicked(cookingStage.id)
+                }
+                closeImageButton.setOnClickListener {
+                    listener.onCloseImageClicked(cookingStage.id)
                 }
             }
         }
@@ -78,7 +80,13 @@ internal class EditCookingStagesAdapter(
                 if (cookingStage.pathImage != null) {
                     imagePreview.setImageURI(Uri.parse(cookingStage.pathImage))
                     imagePreview.visibility = View.VISIBLE
-                } else imagePreview.visibility = View.GONE
+                    closeImageButton.visibility = View.VISIBLE
+                    attachButton.visibility = View.GONE
+                } else {
+                    imagePreview.visibility = View.GONE
+                    closeImageButton.visibility = View.GONE
+                    attachButton.visibility = View.VISIBLE
+                }
             }
         }
     }

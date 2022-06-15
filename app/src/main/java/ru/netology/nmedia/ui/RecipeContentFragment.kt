@@ -40,7 +40,7 @@ class RecipeContentFragment : Fragment() {
             }
         }
 
-    //    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

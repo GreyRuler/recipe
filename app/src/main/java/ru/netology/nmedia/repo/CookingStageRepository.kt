@@ -21,5 +21,6 @@ interface CookingStageRepository {
     fun addCookingStage(nextCookingStageId: Long)
     fun deleteCookingStage(cookingStageId: Long)
     fun saveImage(uri: Uri, context: Context): String
+    fun deleteImage(cookingStageId: Long)
     fun selectImage(uri: Uri, context: Context, cookingStageId: Long)
 }

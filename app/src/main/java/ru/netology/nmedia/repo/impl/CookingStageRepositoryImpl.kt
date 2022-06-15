@@ -77,6 +77,15 @@ class CookingStageRepositoryImpl(
         return tmpFile.path
     }
 
+    override fun deleteImage(cookingStageId: Long) {
+        data.value = cookingStages.also { cookingStages ->
+            cookingStages.find { it.id == cookingStageId }?.also { cookingStage ->
+                cookingStage.pathImage?.let { File(it).delete() }
+                cookingStage.pathImage = null
+            }
+        }
+    }
+
     override fun selectImage(uri: Uri, context: Context, cookingStageId: Long) {
         data.value = cookingStages.apply {
             find { it.id == cookingStageId }?.pathImage = saveImage(uri, context)

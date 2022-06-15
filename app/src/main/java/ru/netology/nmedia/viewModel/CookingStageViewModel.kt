@@ -41,13 +41,17 @@ class CookingStageViewModel(
 
     val data by repository::data
 
-    override fun onAttachClicked(cookingStageId: Long) {
+    override fun onAttachImageClicked(cookingStageId: Long) {
         currentCookingStageId.value = cookingStageId
         selectImageFromGalleryResult.launch("image/*")
     }
 
-    override fun onSaveImage(uri: Uri, context: Context) =
-        repository.saveImage(uri, context)
+    override fun onCloseImageClicked(cookingStageId: Long) {
+        repository.deleteImage(cookingStageId)
+    }
+
+//    override fun onSaveImage(uri: Uri, context: Context) =
+//        repository.saveImage(uri, context)
 
     override fun onSelectImageClicked(uri: Uri, context: Context) {
         repository.selectImage(uri, context, currentCookingStageId.value!!)
