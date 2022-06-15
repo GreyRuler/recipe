@@ -23,4 +23,16 @@
     <string name="channel_remote_name">Уведомления с сервера</string>
     <string name="channel_remote_description">Уведомления с удалённого сервера</string>
     <string name="notification_user_post">%1$s опубликовал новый пост:</string>
+    <string name="name_home">Рецепты</string>
+    <string name="name_favorite">Избранное</string>
+    <string name="european_category">Европейская</string>
+    <string name="asian_category">Азиатская</string>
+    <string name="pan_asian_category">Паназиатская</string>
+    <string name="eastern_category">Восточная</string>
+    <string name="american_category">Американская</string>
+    <string name="russian_category">Русская</string>
+    <string name="mediterranean_category">Средиземноморская</string>
+    <string name="name_cooking_stages">Шаги по приготовлению</string>
+    <string name="description_image_cooking_stage">Фото этапа приготовления</string>
+    <string name="hint_description_cooking_stage">Описание этапа приготовления</string>
 </resources>
