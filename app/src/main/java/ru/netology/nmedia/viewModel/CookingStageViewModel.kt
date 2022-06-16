@@ -46,12 +46,9 @@ class CookingStageViewModel(
         selectImageFromGalleryResult.launch("image/*")
     }
 
-    override fun onCloseImageClicked(cookingStageId: Long) {
+    override fun onDeleteImageClicked(cookingStageId: Long) {
         repository.deleteImage(cookingStageId)
     }
-
-//    override fun onSaveImage(uri: Uri, context: Context) =
-//        repository.saveImage(uri, context)
 
     override fun onSelectImageClicked(uri: Uri, context: Context) {
         repository.selectImage(uri, context, currentCookingStageId.value!!)

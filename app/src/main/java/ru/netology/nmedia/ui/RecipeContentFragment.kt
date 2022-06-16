@@ -68,7 +68,7 @@ class RecipeContentFragment : Fragment() {
                     itemCount: Int
                 ) {
                     binding.editCookingStageRecyclerView
-                        .smoothScrollToPosition(itemCount - 1)
+                        .scrollToPosition(itemCount - 1)
                 }
 
                 override fun onItemRangeRemoved(
@@ -76,13 +76,12 @@ class RecipeContentFragment : Fragment() {
                     itemCount: Int
                 ) {
                     binding.editCookingStageRecyclerView
-                        .smoothScrollToPosition(itemCount)
+                        .scrollToPosition(itemCount)
                 }
             }
         )
 
         viewModel.data.observe(viewLifecycleOwner) { cookingStages ->
-//            adapter.submitList(null)
             adapter.submitList(cookingStages)
             adapter.notifyDataSetChanged()
         }
@@ -97,7 +96,9 @@ class RecipeContentFragment : Fragment() {
         val category = binding.categoriesChipGroup.findViewById<Chip>(
             binding.categoriesChipGroup.checkedChipId
         )?.text
-        val cookingStages = viewModel.data.value?.filter { it.name.isNotBlank() }
+        val cookingStages = viewModel.data.value?.onEach {
+            if (it.name.isBlank()) viewModel.onDeleteImageClicked(it.id)
+        }?.filter { it.name.isNotBlank() }
         if (!nameRecipe.isNullOrBlank() &&
             !cookingStages.isNullOrEmpty() &&
             !category.isNullOrBlank()

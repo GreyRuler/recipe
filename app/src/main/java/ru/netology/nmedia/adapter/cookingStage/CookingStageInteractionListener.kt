@@ -9,9 +9,8 @@ interface CookingStageInteractionListener {
     fun onAddClicked(recipeId: Long)
     fun onRemoveClicked(cookingStageId: Long)
     fun onAttachImageClicked(cookingStageId: Long)
-    fun onCloseImageClicked(cookingStageId: Long)
+    fun onDeleteImageClicked(cookingStageId: Long)
 
     fun onItemMove(fromPosition: Int, toPosition: Int)
-
     fun onItemDismiss(position: Int)
 }

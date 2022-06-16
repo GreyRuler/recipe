@@ -11,7 +11,8 @@
         android:autofillHints="name"
         android:hint="@string/hint_description_cooking_stage"
         android:inputType="textMultiLine"
-        android:padding="@dimen/common_spacing"
+        android:paddingTop="@dimen/common_spacing"
+        android:paddingBottom="@dimen/common_spacing"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
@@ -50,9 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:contentDescription="@string/description_image_cooking_stage"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:scaleType="centerCrop" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/attachButton"
@@ -63,10 +62,7 @@
             android:gravity="end"
             android:visibility="visible"
             app:iconGravity="textEnd"
-
-            app:iconPadding="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
+            app:iconPadding="0dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/closeImageButton"
@@ -76,9 +72,7 @@
             android:contentDescription="@string/button"
             android:visibility="gone"
             app:iconGravity="textEnd"
-            app:iconPadding="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:iconPadding="0dp" />
 
     </FrameLayout>
 

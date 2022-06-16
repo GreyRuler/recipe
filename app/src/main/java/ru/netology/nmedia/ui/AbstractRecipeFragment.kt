@@ -10,6 +10,7 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import ru.netology.nmedia.adapter.RecipesAdapter
 import ru.netology.nmedia.databinding.StartFragmentBinding
@@ -45,6 +46,25 @@ abstract class AbstractRecipeFragment : Fragment() {
         layoutInflater, container, false
     ).also { binding ->
         val adapter = RecipesAdapter(viewModel)
+        adapter.registerAdapterDataObserver(
+            object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(
+                    positionStart: Int,
+                    itemCount: Int
+                ) {
+                    binding.postsRecyclerView
+                        .scrollToPosition(positionStart)
+                }
+
+                override fun onItemRangeRemoved(
+                    positionStart: Int,
+                    itemCount: Int
+                ) {
+                    binding.postsRecyclerView
+                        .scrollToPosition(itemCount)
+                }
+            }
+        )
         binding.postsRecyclerView.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { recipeWithCookingStages ->
             if (recipeWithCookingStages.isNullOrEmpty()) {

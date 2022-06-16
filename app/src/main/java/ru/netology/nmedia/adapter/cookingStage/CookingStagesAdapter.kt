@@ -1,10 +1,13 @@
 package ru.netology.nmedia.adapter.cookingStage
 
+import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.data.CookingStage
 import ru.netology.nmedia.databinding.PointRecipeBinding
+import java.io.File
 
 internal class CookingStagesAdapter(
     private val description: List<CookingStage>
@@ -32,6 +35,11 @@ internal class CookingStagesAdapter(
             this.cookingStage = cookingStage
             with(binding) {
                 preparation.text = cookingStage.name
+                imagePreview.visibility = View.GONE
+                cookingStage.pathImage?.let {
+                    imagePreview.visibility = View.VISIBLE
+                    imagePreview.setImageURI(Uri.parse(it))
+                }
             }
         }
     }

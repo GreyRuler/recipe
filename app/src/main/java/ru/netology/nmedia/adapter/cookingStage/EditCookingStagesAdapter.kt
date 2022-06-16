@@ -3,11 +3,8 @@ package ru.netology.nmedia.adapter.cookingStage
 import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
-import androidx.core.view.MotionEventCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,7 +13,6 @@ import ru.netology.nmedia.adapter.cookingStage.helper.ItemTouchHelperAdapter
 import ru.netology.nmedia.adapter.cookingStage.helper.ItemTouchHelperViewHolder
 import ru.netology.nmedia.data.CookingStage
 import ru.netology.nmedia.databinding.EditDescriptionBinding
-import java.util.*
 
 
 internal class EditCookingStagesAdapter(
@@ -79,7 +75,7 @@ internal class EditCookingStagesAdapter(
                     listener.onAttachImageClicked(cookingStage.id)
                 }
                 closeImageButton.setOnClickListener {
-                    listener.onCloseImageClicked(cookingStage.id)
+                    listener.onDeleteImageClicked(cookingStage.id)
                 }
             }
         }

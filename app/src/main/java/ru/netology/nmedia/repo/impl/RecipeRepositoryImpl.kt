@@ -11,7 +11,7 @@ import ru.netology.nmedia.db.convertion.toModel
 class RecipeRepositoryImpl(dao: PostDao) : AbstractRecipeRepository(dao) {
 
     override val data = dao.getRecipeWithCookingStages().map { entities ->
-        entities.map { it.toModel() }
+        entities.map { it.toModel() }.reversed()
     }
 
     companion object {
