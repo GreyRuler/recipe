@@ -35,4 +35,9 @@
     <string name="name_cooking_stages">Шаги по приготовлению</string>
     <string name="description_image_cooking_stage">Фото этапа приготовления</string>
     <string name="hint_description_cooking_stage">Описание этапа приготовления</string>
+    <string name="description_starting_image">Стартовое изображение</string>
+    <string name="title_empty_state">Приступим!</string>
+    <string name="description_empty_state">Нажмите на кнопку с плюсом, чтобы добавить новый рецепт</string>
+    <string name="description_filter_button">Открытие фильтра</string>
+    <string name="description_close_filter_button">Закрытие фильтра</string>
 </resources>

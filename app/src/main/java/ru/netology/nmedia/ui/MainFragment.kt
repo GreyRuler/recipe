@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.*
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import ru.netology.nmedia.adapter.AppViewPagerAdapter
@@ -62,7 +60,7 @@ class MainFragment : Fragment() {
         layoutInflater, container, false
     ).also { binding ->
         val adapter = AppViewPagerAdapter(
-            requireActivity().supportFragmentManager,
+            childFragmentManager,
             lifecycle,
             fragments
         )

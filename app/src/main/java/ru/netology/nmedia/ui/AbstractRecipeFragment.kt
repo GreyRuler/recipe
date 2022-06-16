@@ -1,7 +1,9 @@
 package ru.netology.nmedia.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.core.view.children
@@ -45,7 +47,24 @@ abstract class AbstractRecipeFragment : Fragment() {
         val adapter = RecipesAdapter(viewModel)
         binding.postsRecyclerView.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner) { recipeWithCookingStages ->
+            if (recipeWithCookingStages.isNullOrEmpty()) {
+                binding.postsRecyclerView.visibility = View.GONE
+                binding.emptyState.visibility = View.VISIBLE
+            } else {
+                binding.emptyState.visibility = View.GONE
+                binding.postsRecyclerView.visibility = View.VISIBLE
+            }
             adapter.submitList(recipeWithCookingStages)
+        }
+        binding.filterButton.setOnClickListener {
+            binding.filterButton.hide()
+            binding.closeFilterButton.show()
+            binding.categoriesChipGroup.visibility = View.VISIBLE
+        }
+        binding.closeFilterButton.setOnClickListener {
+            binding.filterButton.show()
+            binding.closeFilterButton.hide()
+            binding.categoriesChipGroup.visibility = View.GONE
         }
         viewModel.filteredData.observe(viewLifecycleOwner) { recipeWithCookingStages ->
             adapter.submitList(recipeWithCookingStages)
@@ -71,6 +90,5 @@ abstract class AbstractRecipeFragment : Fragment() {
             )
         }
     }.root
-
 
 }

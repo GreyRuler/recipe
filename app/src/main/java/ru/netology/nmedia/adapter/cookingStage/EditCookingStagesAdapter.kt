@@ -1,20 +1,28 @@
-package ru.netology.nmedia.adapter
+package ru.netology.nmedia.adapter.cookingStage
 
+import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import androidx.core.view.MotionEventCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import ru.netology.nmedia.adapter.cookingStage.helper.ItemTouchHelperAdapter
+import ru.netology.nmedia.adapter.cookingStage.helper.ItemTouchHelperViewHolder
 import ru.netology.nmedia.data.CookingStage
 import ru.netology.nmedia.databinding.EditDescriptionBinding
+import java.util.*
 
 
 internal class EditCookingStagesAdapter(
     private val interactionListener: CookingStageInteractionListener
-) : ListAdapter<CookingStage, EditCookingStagesAdapter.ViewHolder>(DiffCallback)  {
+) : ListAdapter<CookingStage, EditCookingStagesAdapter.ViewHolder>(DiffCallback),
+    ItemTouchHelperAdapter {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -39,10 +47,20 @@ internal class EditCookingStagesAdapter(
 //        super.submitList(list?.let { ArrayList(it) })
 //    }
 
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        notifyItemMoved(fromPosition, toPosition)
+        return true
+    }
+
+    override fun onItemDismiss(position: Int) {
+        interactionListener.onItemDismiss(position)
+        notifyItemRemoved(position)
+    }
+
     class ViewHolder(
         private val binding: EditDescriptionBinding,
         listener: CookingStageInteractionListener
-    ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root), ItemTouchHelperViewHolder {
 
         private lateinit var cookingStage: CookingStage
 
@@ -89,7 +107,16 @@ internal class EditCookingStagesAdapter(
                 }
             }
         }
+
+        override fun onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY)
+        }
+
+        override fun onItemClear() {
+            itemView.setBackgroundColor(0)
+        }
     }
+
 
     private object DiffCallback : DiffUtil.ItemCallback<CookingStage>() {
 

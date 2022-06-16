@@ -2,10 +2,10 @@ package ru.netology.nmedia.viewModel
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.ViewModel
-import ru.netology.nmedia.adapter.CookingStageInteractionListener
+import ru.netology.nmedia.adapter.cookingStage.CookingStageInteractionListener
+import ru.netology.nmedia.adapter.cookingStage.helper.ItemTouchHelperAdapter
 import ru.netology.nmedia.data.CookingStage
 import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.repo.CookingStageRepository
@@ -63,6 +63,18 @@ class CookingStageViewModel(
 
     override fun onRemoveClicked(cookingStageId: Long) {
         repository.deleteCookingStage(cookingStageId)
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        val prev = (data.value as MutableList).removeAt(fromPosition)
+        (data.value as MutableList).add(
+            if (toPosition > fromPosition) toPosition - 1 else toPosition,
+            prev
+        )
+    }
+
+    override fun onItemDismiss(position: Int) {
+        (data.value as MutableList).removeAt(position)
     }
 
 }

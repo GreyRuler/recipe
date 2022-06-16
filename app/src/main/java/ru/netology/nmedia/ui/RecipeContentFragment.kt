@@ -3,7 +3,6 @@ package ru.netology.nmedia.ui
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
@@ -13,9 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
-import ru.netology.nmedia.adapter.EditCookingStagesAdapter
+import ru.netology.nmedia.adapter.cookingStage.EditCookingStagesAdapter
+import ru.netology.nmedia.adapter.cookingStage.helper.SimpleItemTouchHelperCallback
 import ru.netology.nmedia.databinding.RecipeContentFragmentBinding
 import ru.netology.nmedia.util.viewModelsFactory
 import ru.netology.nmedia.viewModel.CookingStageViewModel
@@ -55,6 +56,10 @@ class RecipeContentFragment : Fragment() {
         }
         val adapter = EditCookingStagesAdapter(viewModel)
         binding.editCookingStageRecyclerView.adapter = adapter
+
+        val callback = SimpleItemTouchHelperCallback(adapter)
+        val itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(binding.editCookingStageRecyclerView)
 
         adapter.registerAdapterDataObserver(
             object : RecyclerView.AdapterDataObserver() {

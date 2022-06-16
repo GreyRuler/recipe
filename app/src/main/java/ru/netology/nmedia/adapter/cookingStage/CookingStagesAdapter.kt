@@ -1,4 +1,4 @@
-package ru.netology.nmedia.adapter
+package ru.netology.nmedia.adapter.cookingStage
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
